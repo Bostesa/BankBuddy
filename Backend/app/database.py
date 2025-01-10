@@ -1,21 +1,25 @@
+# app/database.py
 import os
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from dotenv import load_dotenv
 
-load_dotenv()  # Loads variables from .env
+# Load environment variables from .env file
+load_dotenv()
 
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://user:pass@localhost/spendwise")
+# Fetch the database URL from environment variables
+DATABASE_URL = os.getenv("DATABASE_URL")
 
-engine = create_engine(DATABASE_URL, echo=False)
+if not DATABASE_URL:
+    raise Exception("DATABASE_URL not set in environment variables")
+
+# Create a SQLAlchemy engine
+engine = create_engine(
+    DATABASE_URL,
+    # Recommended settings for PostgreSQL; adjust if needed for your DB:
+    pool_pre_ping=True, 
+    future=True
+)
+
+# Create a configured "SessionLocal" class
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-Base = declarative_base()
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()

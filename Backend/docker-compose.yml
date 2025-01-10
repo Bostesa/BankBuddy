@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:15
+    container_name: bankbuddy_db
+    environment:
+      POSTGRES_USER: bankbuddy_user
+      POSTGRES_PASSWORD: bankbuddy_pass
+      POSTGRES_DB: bankbuddy_db
+    ports:
+      - "5432:5432"
+
+  bankbuddy:
+    container_name: bankbuddy_app
+    build: .
+    depends_on:
+      - db
+    environment:
+      GEMINI_API_KEY: "${GEMINI_API_KEY}"
+      DATABASE_URL: "${DATABASE_URL}"
+      STOCK_API_KEY: "${STOCK_API_KEY}"
+    ports:
+      - "8000:8000"
