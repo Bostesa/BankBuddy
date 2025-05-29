@@ -11,3 +11,10 @@ A full-stack personal finance assistant that lets you manage accounts and make f
 - **Credit Card Payments**: Pay off credit card balances
 - **Real-time Data**: Live stock prices via Alpha Vantage API
 
+## Tech Stack
+
+- **Backend**: FastAPI, SQLAlchemy, PostgreSQL
+- **Frontend**: React, Tailwind CSS
+- **AI**: Google Gemini for chat interpretation
+- **Deployment**: Docker Compose
+
