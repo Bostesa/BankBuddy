@@ -84,11 +84,7 @@ const MessageInput = ({ onSend, disabled }) => {
 
 const Chat = () => {
   const [messages, setMessages] = useState([
-    {
-      id: 1,
-      text: "Hi there! How can I help you today?",
-      isOutgoing: false
-    }
+    { id: 1, text: "Hi there! How can I help you today?", isOutgoing: false }
   ]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);

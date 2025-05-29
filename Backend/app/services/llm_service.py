@@ -28,6 +28,21 @@ model = genai.GenerativeModel(
         "respond ONLY with a JSON object following this exact format:\n"
         "You are a financial assistant. When a user requests a financial operation (e.g., buy_stock, sell_stock, transfer_funds, pay_credit_card, get_account_balance, get_brokerage_value), respond ONLY with a JSON object describing the intent and parameters. No extra text or disclaimers.",
 
+        "input: What stocks do I have?",
+        "output: \"{\\n\"\n        '  \"intent\": \"GET_HOLDINGS\",\\n'\n        '  \"parameters\": {}\\n'\n        \"}\\n\\n\"",
+
+        "input: Can you show me all my stock holdings?",
+        "output: \"{\\n\"\n        '  \"intent\": \"GET_HOLDINGS\",\\n'\n        '  \"parameters\": {}\\n'\n        \"}\\n\\n\"",
+
+        "input: What are the stocks in my portfolio?",
+        "output: \"{\\n\"\n        '  \"intent\": \"GET_HOLDINGS\",\\n'\n        '  \"parameters\": {}\\n'\n        \"}\\n\\n\"",
+
+        "input: List the stocks I own.",
+        "output: \"{\\n\"\n        '  \"intent\": \"GET_HOLDINGS\",\\n'\n        '  \"parameters\": {}\\n'\n        \"}\\n\\n\"",
+
+        "input: Show me my current stock positions.",
+        "output: \"{\\n\"\n        '  \"intent\": \"GET_HOLDINGS\",\\n'\n        '  \"parameters\": {}\\n'\n        \"}\\n\\n\"",
+
         # ==============================
         # 3 EXAMPLES: TRANSFER_FUNDS
         # ==============================
@@ -128,6 +143,21 @@ def generate_multi_example():
     """
     lines = [
         "You are a financial assistant. When a user requests a financial operation (e.g., buy_stock, sell_stock, transfer_funds, pay_credit_card, get_account_balance, get_brokerage_value), respond ONLY with a JSON object describing the intent and parameters. No extra text or disclaimers.",
+
+        "input: What stocks do I have?",
+        "output: \"{\\n\"\n        '  \"intent\": \"GET_HOLDINGS\",\\n'\n        '  \"parameters\": {}\\n'\n        \"}\\n\\n\"",
+
+        "input: Can you show me all my stock holdings?",
+        "output: \"{\\n\"\n        '  \"intent\": \"GET_HOLDINGS\",\\n'\n        '  \"parameters\": {}\\n'\n        \"}\\n\\n\"",
+
+        "input: What are the stocks in my portfolio?",
+        "output: \"{\\n\"\n        '  \"intent\": \"GET_HOLDINGS\",\\n'\n        '  \"parameters\": {}\\n'\n        \"}\\n\\n\"",
+
+        "input: List the stocks I own.",
+        "output: \"{\\n\"\n        '  \"intent\": \"GET_HOLDINGS\",\\n'\n        '  \"parameters\": {}\\n'\n        \"}\\n\\n\"",
+
+        "input: Show me my current stock positions.",
+        "output: \"{\\n\"\n        '  \"intent\": \"GET_HOLDINGS\",\\n'\n        '  \"parameters\": {}\\n'\n        \"}\\n\\n\"",
 
         # ==============================
         # 3 EXAMPLES: TRANSFER_FUNDS

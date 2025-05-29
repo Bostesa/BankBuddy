@@ -13,7 +13,8 @@ from app.services.financial_logic import (
     transfer_funds,
     pay_credit_card,
     get_account_balance,
-    get_brokerage_value
+    get_brokerage_value,
+    get_user_stocks,
 )
 
 router = APIRouter(prefix="/chat", tags=["Chat"])
@@ -60,7 +61,20 @@ def handle_chat(req: ChatRequest, db: Session = Depends(get_db)):
 
     # 3) Execute financial operations based on intent
     try:
-        if intent == "BUY_STOCK":
+        if intent == "GET_HOLDINGS":
+            user_id = 1  # Assuming single user scenario; adjust as needed
+            # Optionally update brokerage value before retrieving holdings
+            brokerage_account = db.query(Account).filter_by(user_id=user_id, account_type="brokerage").first()
+            if brokerage_account:
+                stocks = get_user_stocks(db, user_id)
+                if not stocks:
+                    final_text = "You have no stock holdings at the moment."
+                else:
+                    lines = []
+                    for stk in stocks:
+                        lines.append(f"{stk['ticker']}: {stk['shares']} shares at avg cost ${stk['avg_cost']}")
+                    final_text = "Your stock portfolio has been updated! Here's a summary of your holdings:\n" + "\n".join(lines)
+        elif intent == "BUY_STOCK":
             ticker = params.get("ticker")
             shares = params.get("shares")
             if not all([ticker, shares]):

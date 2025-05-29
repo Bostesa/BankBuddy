@@ -3,7 +3,7 @@ set -e
 export PYTHONPATH=/app
 
 echo "Waiting for DB to start..."
-sleep 1
+sleep 5
 
 echo "Seeding the database..."
 python data/seed_data.py
