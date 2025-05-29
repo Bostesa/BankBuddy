@@ -272,3 +272,28 @@ def get_brokerage_value(db: Session, brokerage_id: int) -> float:
         total_value += current_price * holding.shares
 
     return round(total_value, 2)
+
+def get_user_stocks(db: Session, user_id: int):
+    """
+    Returns a list of (ticker, shares) for all holdings in the user's brokerage account(s).
+    """
+    # 1) Find the user's brokerage account(s)
+    brokerage_accounts = db.query(Account).filter_by(
+        user_id=user_id,
+        account_type="brokerage"
+    ).all()
+    if not brokerage_accounts:
+        raise ValueError("No brokerage accounts found for this user.")
+    
+    # 2) Collect holdings from each brokerage
+    all_holdings = []
+    for brokerage in brokerage_accounts:
+        holdings = db.query(BrokerageHolding).filter_by(brokerage_account_id=brokerage.id).all()
+        for h in holdings:
+            all_holdings.append({
+                "ticker": h.ticker,
+                "shares": h.shares,
+                "avg_cost": h.avg_cost
+            })
+    
+    return all_holdings

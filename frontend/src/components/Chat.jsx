@@ -31,7 +31,7 @@ const MessageInput = ({ onSend }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (message.trim()) {
-      onSend(message);
+      onSend(message.trim());
       setMessage('');
     }
   };
@@ -61,11 +61,7 @@ const MessageInput = ({ onSend }) => {
 
 const Chat = () => {
   const [messages, setMessages] = useState([
-    {
-      id: 1,
-      text: "Hi there! How can I help you today?",
-      isOutgoing: false
-    }
+    { id: 1, text: "Hi there! How can I help you today?", isOutgoing: false }
   ]);
   
   const messagesEndRef = useRef(null);
@@ -78,20 +74,40 @@ const Chat = () => {
     scrollToBottom();
   }, [messages]);
 
-  const handleSendMessage = (text) => {
-    const newUserMessage = {
-      id: messages.length + 1,
-      text,
-      isOutgoing: true
-    };
-    
-    const botResponse = {
-      id: messages.length + 2,
-      text: "Thanks for your message! This is a dummy response.",
-      isOutgoing: false
-    };
+  const handleSendMessage = async (text) => {
+    // Add user message immediately
+    const newUserMessage = { id: messages.length + 1, text, isOutgoing: true };
+    setMessages(prev => [...prev, newUserMessage]);
 
-    setMessages([...messages, newUserMessage, botResponse]);
+    try {
+      // Call the chatbot API
+      const response = await fetch('http://localhost:8000/chat/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text, stream: false })
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      const botResponse = {
+        id: messages.length + 2,
+        text: data.reply,
+        isOutgoing: false
+      };
+
+      setMessages(prev => [...prev, botResponse]);
+    } catch (error) {
+      console.error("Error calling chatbot API:", error);
+      const errorResponse = {
+        id: messages.length + 2,
+        text: "Sorry, there was an error processing your request.",
+        isOutgoing: false
+      };
+      setMessages(prev => [...prev, errorResponse]);
+    }
   };
 
   return (
@@ -99,11 +115,7 @@ const Chat = () => {
       <Header />
       <div className="flex-1 overflow-y-auto p-4 space-y-2 bg-white">
         {messages.map((message) => (
-          <Message
-            key={message.id}
-            text={message.text}
-            isOutgoing={message.isOutgoing}
-          />
+          <Message key={message.id} text={message.text} isOutgoing={message.isOutgoing} />
         ))}
         <div ref={messagesEndRef} />
       </div>

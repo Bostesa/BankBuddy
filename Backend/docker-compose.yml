@@ -21,3 +21,21 @@ services:
       STOCK_API_KEY: "${STOCK_API_KEY}"
     ports:
       - "8000:8000"
+    
+  frontend:
+    build:
+        context: ../frontend
+    command: sh -c "npm ci --include=dev && npm run start"
+    environment:
+      NODE_ENV: development
+    volumes:
+      - ../frontend:/app                 # your source code
+      - node_modules:/app/node_modules   # container owns deps
+    ports:
+      - "3000:3000"
+    depends_on:
+      - bankbuddy
+
+
+volumes:
+  node_modules:
